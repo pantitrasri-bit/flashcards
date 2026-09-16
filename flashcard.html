@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Workplace Vocabulary Flashcards (20 Words)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .perspective { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col font-sans text-slate-800">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-5 text-center">
+      <h1 class="text-2xl font-bold mb-1">Digital Workplace Flashcards</h1>
+      <p class="text-indigo-100 text-xs">ทบทวนคำศัพท์ภาษาอังกฤษสำหรับการทำงาน 20 คำ (พร้อมคำอ่าน)</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-md w-full mx-auto px-4 py-6 flex flex-col items-center justify-between">
+    
+    <!-- Info Bar -->
+    <div class="w-full flex items-center justify-between gap-2 mb-4 px-2">
+      <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+        การ์ดคำศัพท์
+      </span>
+      <div class="text-xs font-medium text-slate-500">
+        การ์ดใบที่ <span id="current-index" class="text-indigo-600 font-bold">1</span> / <span id="total-cards">20</span>
+      </div>
+    </div>
+
+    <!-- Flashcard Container -->
+    <div class="w-full h-80 perspective cursor-pointer my-auto" onclick="flipCard()">
+      <div id="card" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-2xl">
+        
+        <!-- Front Side (English Word & Reading) -->
+        <div class="absolute w-full h-full bg-white rounded-2xl border-2 border-indigo-100 p-6 flex flex-col justify-between items-center text-center backface-hidden select-none">
+          <div class="w-full flex justify-end items-center text-xs font-semibold text-slate-400">
+            <span><i class="fa-solid fa-rotate"></i> แตะเพื่อดูความหมาย</span>
+          </div>
+          
+          <div class="my-auto">
+            <h2 id="card-word" class="text-3xl font-extrabold text-slate-800 mb-1">Word</h2>
+            <p id="card-phonetic" class="text-indigo-500 font-semibold text-sm mb-2">คำอ่าน</p>
+            <p id="card-pos" class="text-slate-400 font-medium italic text-xs">Part of speech</p>
+          </div>
+
+          <div class="text-xs text-slate-400 font-light">
+            กด Spacebar หรือ แตะที่การ์ดเพื่อพลิก
+          </div>
+        </div>
+
+        <!-- Back Side (Thai Meaning & Phonetic) -->
+        <div class="absolute w-full h-full bg-indigo-900 text-white rounded-2xl p-6 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180 select-none">
+          <div class="w-full flex justify-end items-center text-xs font-semibold text-indigo-300">
+            <span><i class="fa-solid fa-rotate"></i> พลิกกลับ</span>
+          </div>
+          
+          <div class="my-auto px-2">
+            <p id="card-phonetic-back" class="text-indigo-300 font-medium text-xs mb-1"></p>
+            <h3 id="card-translation" class="text-xl font-bold text-amber-300 mb-2">ความหมาย</h3>
+            <p id="card-pos-back" class="text-xs text-indigo-200 italic"></p>
+          </div>
+
+          <div class="text-xs text-indigo-300 font-light">
+            Digital Workplace Vocabulary
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="w-full flex items-center justify-between gap-3 mt-6">
+      <button onclick="prevCard()" class="flex-1 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> ก่อนหน้า
+      </button>
+
+      <button onclick="shuffleCards()" class="px-5 py-3 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold rounded-xl text-sm transition flex items-center justify-center gap-2" title="สุ่มการ์ด">
+        <i class="fa-solid fa-shuffle"></i> สุ่ม
+      </button>
+
+      <button onclick="nextCard()" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+        ถัดไป <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+  </main>
+
+  <footer class="bg-slate-200 py-3 text-center text-xs text-slate-500">
+    กดปุ่มลูกศร ◄ / ► บนคีย์บอร์ดเพื่อเปลี่ยนการ์ดได้
+  </footer>
+
+  <script>
+    const vocabularyDatabase = [
+      { word: "Asynchronous", phonetic: "อะ-ซิง-โคร-นัส", pos: "Adjective", translation: "การสื่อสารที่ส่ง-รับไม่ได้ทำในเวลาเดียวกันทันที ไม่ต้องตอบทันที" },
+      { word: "Etiquette", phonetic: "เอท-ทิ-เคต", pos: "Noun", translation: "มารยาทและข้อปฏิบัติที่ควรทำในสังคม/ดิจิทัล" },
+      { word: "Input", phonetic: "อิน-พุท", pos: "Noun", translation: "ความคิดเห็น ข้อมูล ข้อเสนอแนะ หรือไอเดียที่เสนอแนะในงาน" },
+      { word: "Acknowledge", phonetic: "แอ็ค-นอล-เลจ", pos: "Verb", translation: "รับทราบ ตอบรับการได้รับข้อมูลหรือข้อความ" },
+      { word: "Mute", phonetic: "มิวท์", pos: "Noun / Verb", translation: "การปิดเสียงไมโครโฟน / ปิดเสียง" },
+      { word: "Obligatory", phonetic: "ออบ-ลิ-กา-โท-รี", pos: "Adjective", translation: "เป็นข้อบังคับ ตามกฎระเบียบ หรือมารยาท" },
+      { word: "Decline", phonetic: "ดี-ไคลน์", pos: "Verb", translation: "ปฏิเสธ (คำเชิญ/คำขอ) อย่างสุภาพ" },
+      { word: "Phrasing", phonetic: "เฟร-ซิ่ง", pos: "Noun", translation: "การเลือกใช้ถ้อยคำ การเรียบเรียงสำนวนให้เหมาะสม" },
+      { word: "Sign-offs", phonetic: "ไซน์-ออฟส์", pos: "Noun", translation: "คำลงท้ายข้อความหรืออีเมล (เช่น Sincerely, Best regards)" },
+      { word: "Platform", phonetic: "แพลต-ฟอร์ม", pos: "Noun", translation: "โปรแกรม/แอปพลิเคชันที่ใช้ทำงาน (เช่น Teams, Zoom)" },
+      { word: "Associate", phonetic: "อะ-โซ-ชิ-เอท", pos: "Noun", translation: "พนักงานระดับปฏิบัติการ/แรกเริ่ม" },
+      { word: "Decentralized", phonetic: "ดี-เซน-เทรอล-ไลซ์ด", pos: "Adjective", translation: "การกระจายอำนาจ/การทำงานในหลายพื้นที่" },
+      { word: "Rely", phonetic: "รี-ลาย", pos: "Verb", translation: "พึ่งพา หรือไว้วางใจ" },
+      { word: "Siloed", phonetic: "ไซ-โลด์", pos: "Adjective", translation: "แยกส่วน ไม่ร่วมมือหรือสื่อสารกับทีมอื่น" },
+      { word: "Implement", phonetic: "อิม-พลิ-เมนท์", pos: "Verb", translation: "นำระบบ แผนงาน หรือกระบวนการไปใช้จริง" },
+      { word: "Coordinate", phonetic: "โค-ออร์-ดิ-เนท", pos: "Verb", translation: "ประสานงาน จัดระเบียบให้หลายคนทำงานร่วมกัน" },
+      { word: "Synchronize", phonetic: "ซิง-โคร-ไนซ์", pos: "Verb", translation: "ปรับเวลา/การทำงานให้ตรงกัน" },
+      { word: "Optimize", phonetic: "ออพ-ทิ-ไมซ์", pos: "Verb", translation: "ปรับปรุงระบบ/กระบวนการให้มีประสิทธิภาพสูงสุด" },
+      { word: "Productivity", phonetic: "โพร-ดัค-ทิ-วิ-ที", pos: "Noun", translation: "ประสิทธิภาพและความคุ้มค่าในการทำงาน" },
+      { word: "Mandatory", phonetic: "แมน-ดา-โท-รี", pos: "Adjective", translation: "ข้อบังคับที่ต้องทำตามกฎหมายหรือนโยบาย" }
+    ];
+
+    let currentCards = [...vocabularyDatabase];
+    let currentIndex = 0;
+    let isFlipped = false;
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function updateCard() {
+      if (currentCards.length === 0) return;
+      const cardData = currentCards[currentIndex];
+
+      if (isFlipped) {
+        document.getElementById('card').classList.remove('rotate-y-180');
+        isFlipped = false;
+      }
+
+      setTimeout(() => {
+        document.getElementById('card-word').textContent = cardData.word;
+        document.getElementById('card-phonetic').textContent = `[ ${cardData.phonetic} ]`;
+        document.getElementById('card-pos').textContent = cardData.pos;
+        
+        document.getElementById('card-phonetic-back').textContent = `[ ${cardData.phonetic} ]`;
+        document.getElementById('card-pos-back').textContent = `(${cardData.pos})`;
+        document.getElementById('card-translation').textContent = cardData.translation;
+
+        document.getElementById('current-index').textContent = currentIndex + 1;
+        document.getElementById('total-cards').textContent = currentCards.length;
+      }, isFlipped ? 200 : 0);
+    }
+
+    function flipCard() {
+      isFlipped = !isFlipped;
+      document.getElementById('card').classList.toggle('rotate-y-180', isFlipped);
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % currentCards.length;
+      updateCard();
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + currentCards.length) % currentCards.length;
+      updateCard();
+    }
+
+    function shuffleCards() {
+      currentCards = shuffleArray([...vocabularyDatabase]);
+      currentIndex = 0;
+      updateCard();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'ArrowRight') nextCard();
+      if (e.code === 'ArrowLeft') prevCard();
+      if (e.code === 'Space') {
+        e.preventDefault();
+        flipCard();
+      }
+    });
+
+    window.onload = () => { shuffleCards(); };
+  </script>
+</body>
+</html>
